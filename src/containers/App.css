@@ -1,3 +1,4 @@
+@import url(//fonts.googleapis.com/css?family=Mansalva&display=swap);
 .App {
   text-align: center;
 }
@@ -30,4 +31,11 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+h1{
+  
+  font-family: 'Mansalva', cursive;
+  color:red;
+  
 }
