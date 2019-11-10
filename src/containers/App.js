@@ -1,17 +1,30 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import logo from '../logo.svg';
 import './App.css';
 import CardsList from "../components/CardsList";
 import SearchBox from "../components/SearchBox";
 import ErrorBoundary from "../components/ErroBoundary";
-//import { robots } from "./robots";
 import Scrol from "../components/Scrol";
+import { searchRobots } from '../reducer.js';
+import { setSearchField } from '../action.js';
+const mapStateToProps = (state) => {
+  return{
+    searchField: state.searchField
+  }
+}
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onSearchChange: (event) => {
+      dispatch(setSearchField(event.target.value))
+    }
+  }
+}
 class App extends Component {
   constructor() {
     super()
     this.state = {
-      robots: [],
-      searchfield: ""
+      robots: []
     }
   }
   componentDidMount() {
@@ -24,15 +37,13 @@ class App extends Component {
     });
 
   }
-  onSearchChange = (event) => {
-    // console.log("Checking flow here!!!");
-    this.setState({ searchfield: event.target.value });
-    console.log(event.target.value);
-  }
+ 
+
 
   render() {
+    const {searchField,onSearchChange} = this.props;
     const filteredRobots = this.state.robots.filter(robot => {
-      return robot.name.toLowerCase().includes(this.state.searchfield.toLowerCase());
+      return robot.name.toLowerCase().includes(searchField.toLowerCase());
     });
     if (this.state.robots.length === 0) {
       return (<h1>Loading....</h1>)
@@ -40,8 +51,8 @@ class App extends Component {
     return (
       <div className="tc">
         <h1>RoboFriends</h1>
-        <SearchBox onSearchChange={this.onSearchChange}
-          searchfield={this.state.searchfield} />
+        <SearchBox onSearchChange={onSearchChange}
+          searchField={searchField} />
         <Scrol>
           <ErrorBoundary>
             <CardsList robots={filteredRobots} />
@@ -53,4 +64,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default connect(mapStateToProps, mapDispatchToProps)(App);
